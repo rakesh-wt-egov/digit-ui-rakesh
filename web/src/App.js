@@ -9,7 +9,7 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
