@@ -2,7 +2,7 @@ import React from 'react';
 
 import { initPGRComponents, PGRReducers } from "@egovernments/digit-ui-module-pgr";
 import { initFSMComponents } from "@egovernments/digit-ui-module-fsm";
-import { PTModule, PTLinks } from "@egovernments/digit-ui-module-pt";
+import { PTModule, PTLinks, PTComponents } from "@egovernments/digit-ui-module-pt";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
@@ -17,6 +17,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
   PTLinks,
   PaymentModule,
   PaymentLinks,
+  ...PTComponents,
 });
 
 initPGRComponents();
