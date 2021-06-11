@@ -8,10 +8,12 @@ import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
+import { HRMSModule ,initHRMSComponents  } from "@egovernments/digit-ui-module-hrms";
+import { TLModule, TLLinks,initTLComponents } from "@egovernments/digit-ui-module-tl";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -21,12 +23,17 @@ window.Digit.ComponentRegistryService.setupRegistry({
   ...PTComponents,
   MCollectLinks,
   MCollectModule,
+  HRMSModule,
+  TLModule,
+  TLLinks,
 });
 
 initPGRComponents();
 initFSMComponents();
 initDSSComponents();
 initMCollectComponents();
+initHRMSComponents()
+initTLComponents();
 
 const moduleReducers = (initData) => ({
   pgr: PGRReducers(initData),
