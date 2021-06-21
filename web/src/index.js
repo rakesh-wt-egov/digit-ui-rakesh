@@ -4,6 +4,8 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 // import "@egovernments/digit-ui-css/dist/index.css";
 import "./index.css";
 import App from './App';
+import IframeComponent from "./components/IframeComponent";
+
 
 initLibraries();
 
@@ -50,6 +52,10 @@ if (!user || !user.access_token || !user.info) {
   window.Digit.SessionStorage.set("Employee.tenantId", employeeTenantId);
   // end
 }
+
+window.location.href.includes("iframe") ?
+  ReactDOM.render(<IframeComponent />, document.getElementById("root"))
+  :
 
 ReactDOM.render(
   <React.StrictMode>
