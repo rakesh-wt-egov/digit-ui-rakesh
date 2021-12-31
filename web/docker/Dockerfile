@@ -10,6 +10,8 @@ RUN ls -lah
 
 
 RUN node web/envs.js
+RUN cd web && rm -rf node_modules \
+    && rm -f yarn.lock
 RUN cd web && git branch --show-current
 RUN cd web && yarn install
 RUN cd web && ls -lah
