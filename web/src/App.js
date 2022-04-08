@@ -15,6 +15,7 @@ import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-m
 initLibraries();
 
 const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "MCollect","HRMS", "TL","Receipts"];
+// const enabledModules = ["FSM"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -43,7 +44,8 @@ const moduleReducers = (initData) => ({
 });
 
 function App() {
-  const stateCode = window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
+  // const stateCode = window.globalConfigs?.getConfig("STATE_LEVEL_TENANT_ID") || process.env.REACT_APP_STATE_LEVEL_TENANT_ID;
+  const stateCode = "pb";
   if (!stateCode) {
     return <h1>stateCode is not defined</h1>
   }
