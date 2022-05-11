@@ -15,6 +15,7 @@ export const initCustomisationComponents = () => {
     Object.entries(customisedComponent).forEach(([key, value]) => {
         Digit.ComponentRegistryService.setComponent(key, value);
     });
+    customizations.forEach((setup) => setup());
 };
 
 export const customizations = [
