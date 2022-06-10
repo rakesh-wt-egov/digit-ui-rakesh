@@ -4,7 +4,7 @@ import { fsmComponents } from './fsm';
 
 import { OverideLogout } from "./Hooks";
 import { engagementComponents } from './engagement';
-
+import { OverideUseCashPaymentDetails } from "./common/payments/employee/payment-collect/ManualReciept";
 
 var Digit = window.Digit || {};
 
@@ -22,5 +22,7 @@ export const initCustomisationComponents = () => {
 };
 
 export const customizations = [
-    OverideLogout
+    OverideLogout,
+    OverideUseCashPaymentDetails,
+
 ];
