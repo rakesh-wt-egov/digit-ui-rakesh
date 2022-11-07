@@ -16,7 +16,7 @@ RUN cd web && ls -lah
 RUN cd web && yarn build
 
 #FROM nginx:mainline-alpine
-FROM odhub/nginx-unprivileged
+FROM nginxinc/nginx-unprivileged
 ENV WEB_DIR=/var/web/digit-ui
 
 #RUN mkdir -p ${WORK_DIR}
