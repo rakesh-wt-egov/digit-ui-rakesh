@@ -22,5 +22,5 @@ ENV WEB_DIR=/var/web/digit-ui
 #RUN mkdir -p ${WORK_DIR}
 WORKDIR /var/web/digit-ui
 
-COPY --from=build /app/web/build ${WORK_DIR}/
+COPY --from=build /app/web/build .
 COPY --from=build /app/web/docker/nginx.conf /etc/nginx/conf.d/default.conf
