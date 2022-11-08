@@ -27,9 +27,15 @@
   "devDependencies": {
     "http-proxy-middleware": "1.3.1"
   },
+  "resolutions": {
+    "**/babel-loader": "8.2.2",
+    "**/@babel/core": "7.14.0",
+    "**/@babel/preset-env": "7.14.0",
+    "**/@babel/plugin-transform-modules-commonjs": "7.14.0"
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "build:prepare": "./build.sh"
   },
   "eslintConfig": {
