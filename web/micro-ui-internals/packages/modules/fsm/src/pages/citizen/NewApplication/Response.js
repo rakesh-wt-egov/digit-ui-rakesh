@@ -51,7 +51,7 @@ const Response = ({ data, onSuccess }) => {
     if (!mutationHappened && !errorInfo) {
       try {
         const { subtype, pitDetail, address, pitType, source, selectGender, selectPaymentPreference, selectTripNo } = data;
-        const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum } = address;
+        const { city, locality, geoLocation, pincode, street, doorNo, landmark, slum, gramPanchayat, village } = address;
         setPaymentPreference(selectPaymentPreference?.code);
         const formdata = {
           fsm: {
@@ -71,8 +71,16 @@ const Response = ({ data, onSuccess }) => {
               city: city.name,
               pincode,
               locality: {
-                code: locality.code,
-                name: locality.name,
+                code: locality?.code,
+                name: locality?.name,
+              },
+              gramPanchayat: {
+                code: gramPanchayat?.slumCode,
+                name: gramPanchayat?.nmae,
+              },
+              village: {
+                code: village?.code,
+                name: village?.name,
               },
               geoLocation: {
                 latitude: geoLocation?.latitude,

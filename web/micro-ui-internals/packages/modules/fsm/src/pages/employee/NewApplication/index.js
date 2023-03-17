@@ -43,11 +43,10 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-
     if (
       formData?.propertyType &&
       formData?.subtype &&
-      formData?.address?.locality?.code &&
+      // formData?.address?.locality?.code &&
       formData?.tripData?.vehicleType &&
       formData?.channel &&
       formData?.tripData?.amountPerTrip
@@ -93,13 +92,17 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
+    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : "POST_PAY";
+    const gpCode = data?.address?.gramPanchayat?.code;
+    const gpName = data?.address?.gramPanchayat?.name;
+    const villageCode = data?.address?.village?.code;
+    const villageName = data?.address?.village?.name;
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
-          gender: gender
+          gender: gender,
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -123,6 +126,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
           state,
           pincode,
           slumName: slum,
+          gramPanchayat: {
+            code: gpCode,
+            name: gpName,
+          },
+          village: {
+            code: villageCode,
+            name: villageName,
+          },
           locality: {
             code: localityCode,
             name: localityName,
@@ -157,12 +168,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
-        return {
-          ...config,
-          body: config.body.filter((a) => !a.hideInEmployee),
-        };
-      })}
+      config={configs
+        .filter((i) => !i.hideInEmployee)
+        .map((config) => {
+          return {
+            ...config,
+            body: config.body.filter((a) => !a.hideInEmployee),
+          };
+        })}
       fieldStyle={{ marginRight: 0 }}
       onSubmit={onSubmit}
       defaultValues={defaultValues}

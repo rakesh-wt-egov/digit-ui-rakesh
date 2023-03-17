@@ -65,7 +65,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
       },
       default: formData?.tripData?.amountPerTrip,
-      disable: true,
+      disable: formData?.address?.propertyLocation.code === "FROM_GRAM_PANCHAYAT" ? false : true,
       isMandatory: true,
     },
     {
@@ -86,6 +86,10 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     onSelect(config.key, { ...formData[config.key], noOfTrips: value });
   }
 
+  function setAmount(value) {
+    onSelect(config.key, { ...formData[config.key], amountPerTrip: value, amount: value * formData.tripData.noOfTrips });
+  }
+
   function selectVehicle(value) {
     setVehicle({ label: value.capacity });
     onSelect(config.key, { ...formData[config.key], vehicleType: value });
@@ -99,8 +103,13 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       if (formData?.tripData?.vehicleType !== vehicle) {
         setVehicle({ label: formData?.tripData?.vehicleType?.capacity });
       }
-
-      if (formData?.propertyType && formData?.subtype && formData?.address && formData?.tripData?.vehicleType?.capacity) {
+      if (
+        formData?.propertyType &&
+        formData?.subtype &&
+        formData?.address &&
+        formData?.tripData?.vehicleType?.capacity &&
+        formData.address.propertyLocation.code === "WITHIN_ULB_LIMITS"
+      ) {
         const capacity = formData?.tripData?.vehicleType.capacity;
         const { slum: slumDetails } = formData.address;
         const slum = slumDetails ? "YES" : "NO";
@@ -124,6 +133,11 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           });
           setError(true);
         }
+      }
+      if (formData?.address?.propertyLocation.code === "FROM_GRAM_PANCHAYAT" && formData.tripData.noOfTrips && formData.tripData.amountPerTrip) {
+        setValue({
+          amount: formData.tripData.amountPerTrip * formData.tripData.noOfTrips,
+        });
       }
     })();
   }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.capacity, formData?.tripData?.noOfTrips]);
@@ -155,7 +169,11 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           <div className="field">
             <TextInput
               type={input.type}
-              onChange={(e) => setTripNum(e.target.value)}
+              onChange={(e) =>
+                index === 1 && formData.address.propertyLocation?.code === "FROM_GRAM_PANCHAYAT"
+                  ? setAmount(e.target.value)
+                  : setTripNum(e.target.value)
+              }
               key={input.name}
               value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : null}
               {...input.validation}

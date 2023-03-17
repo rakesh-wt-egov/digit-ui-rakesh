@@ -37,7 +37,8 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
-import {FsmBreadCrumb} from "./pages/employee";
+import { FsmBreadCrumb } from "./pages/employee";
+import SelectLocalityOrGramPanchayat from "./pageComponents/SelectLocalityOrGramPanchayat";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
@@ -171,7 +172,8 @@ const componentsToRegister = {
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
-  FsmBreadCrumb
+  FsmBreadCrumb,
+  SelectLocalityOrGramPanchayat,
 };
 
 export const initFSMComponents = () => {

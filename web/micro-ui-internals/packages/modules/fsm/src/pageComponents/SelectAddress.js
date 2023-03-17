@@ -6,23 +6,37 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   const allCities = Digit.Hooks.fsm.useTenants();
   let tenantId = Digit.ULBService.getCurrentTenantId();
 
+  const inputs = [
+    {
+      active: true,
+      code: "WITHIN_ULB_LIMITS",
+      i18nKey: "WITHIN_ULB_LIMITS",
+      name: "Witnin ULB Limits",
+    },
+    {
+      active: true,
+      code: "FROM_GRAM_PANCHAYAT",
+      i18nKey: "FROM_GRAM_PANCHAYAT",
+      name: "From Gram Panchayat",
+    },
+  ];
   const { pincode, city } = formData?.address || "";
   const cities =
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
-        ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
-        : allCities;
-
+      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+      : allCities;
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || Digit.SessionStorage.get("fsm.file.address.city") || null);
-  const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
-    selectedCity?.code,
-    "revenue",
-    {
-      enabled: !!selectedCity,
-    },
-    t
-  );
+  const [selectLocation, setSelectLocation] = useState(inputs[0]);
+  // const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
+  //   selectedCity?.code,
+  //   "revenue",
+  //   {
+  //     enabled: !!selectedCity,
+  //   },
+  //   t
+  // );
   const [localities, setLocalities] = useState();
   const [selectedLocality, setSelectedLocality] = useState();
 
@@ -35,31 +49,12 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   }, [cities]);
 
   useEffect(() => {
-    if (selectedCity && fetchedLocalities) {
-      let __localityList = fetchedLocalities;
-      let filteredLocalityList = [];
-
-      if (formData?.address?.locality) {
-        setSelectedLocality(formData.address.locality);
-      }
-
-      if (formData?.address?.pincode) {
-        filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
-        if (!formData?.address?.locality) setSelectedLocality();
-      }
-
+    if (selectedCity && selectLocation) {
       if (userType === "employee") {
-        onSelect(config.key, { ...formData[config.key], city: selectedCity });
-      }
-      setLocalities(() => (filteredLocalityList.length > 0 ? filteredLocalityList : __localityList));
-      if (filteredLocalityList.length === 1) {
-        setSelectedLocality(filteredLocalityList[0]);
-        if (userType === "employee") {
-          onSelect(config.key, { ...formData[config.key], locality: filteredLocalityList[0] });
-        }
+        onSelect(config.key, { ...formData[config.key], city: selectedCity, propertyLocation: selectLocation });
       }
     }
-  }, [selectedCity, formData?.address?.pincode, fetchedLocalities]);
+  }, [selectedCity, selectLocation]);
 
   function selectCity(city) {
     setSelectedLocality(null);
@@ -68,15 +63,21 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
     setSelectedCity(city);
   }
 
-  function selectLocality(locality) {
-    setSelectedLocality(locality);
+  // function selectLocality(locality) {
+  //   setSelectedLocality(locality);
+  //   if (userType === "employee") {
+  //     onSelect(config.key, { ...formData[config.key], locality: locality });
+  //   }
+  // }
+
+  function selectedValue(value) {
+    setSelectLocation(value);
     if (userType === "employee") {
-      onSelect(config.key, { ...formData[config.key], locality: locality });
+      onSelect(config.key, { ...formData[config.key], propertyLocation: value });
     }
   }
-
   function onSubmit() {
-    onSelect(config.key, { city: selectedCity, locality: selectedLocality });
+    onSelect(config.key, { city: selectedCity, propertyLocation: selectLocation });
   }
 
   if (userType === "employee") {
@@ -99,7 +100,19 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
           />
         </LabelFieldPair>
         <LabelFieldPair>
-          <CardLabel className="card-label-smaller">
+          <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
+          <div className="field">
+            <RadioButtons
+              selectedOption={selectLocation}
+              onSelect={selectedValue}
+              style={{ display: "flex", marginBottom: 0 }}
+              innerStyles={{ marginLeft: "10px" }}
+              options={inputs}
+              optionsKey="i18nKey"
+              // disabled={editScreen}
+            />
+          </div>
+          {/* <CardLabel className="card-label-smaller">
             {t("CS_CREATECOMPLAINT_MOHALLA")}
             {config.isMandatory ? " * " : null}
           </CardLabel>
@@ -111,7 +124,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             select={selectLocality}
             optionKey="i18nkey"
             t={t}
-          />
+          /> */}
         </LabelFieldPair>
       </div>
     );
@@ -119,16 +132,19 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
   return (
     <React.Fragment>
       <Timeline currentStep={1} flow="APPLY" />
-      <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
+      <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectLocation ? false : true}>
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
+        <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="i18nKey" onSelect={selectCity} t={t} />
+        <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
         <RadioOrSelect
-          options={cities}
-          selectedOption={selectedCity}
+          isMandatory={config.isMandatory}
+          options={inputs}
+          selectedOption={selectLocation}
           optionKey="i18nKey"
-          onSelect={selectCity}
+          onSelect={selectedValue}
           t={t}
         />
-        {selectedCity && localities && <CardLabel>{`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}</CardLabel>}
+        {/* {selectedCity && localities && <CardLabel>{`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}</CardLabel>}
         {selectedCity && localities && (
           <RadioOrSelect
             isMandatory={config.isMandatory}
@@ -138,7 +154,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
             onSelect={selectLocality}
             t={t}
           />
-        )}
+        )} */}
       </FormStep>
     </React.Fragment>
   );
