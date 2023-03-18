@@ -42,6 +42,8 @@ export const CollectPayment = (props) => {
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
 
+  const isFsm = location?.pathname?.includes("fsm") || location?.pathname?.includes("FSM");
+
   useEffect(() => {
     if (paymentdetails?.Bill && paymentdetails.Bill.length === 0) {
       setToast({ key: "error", action: "CS_BILL_NOT_FOUND" });
@@ -260,6 +262,7 @@ export const CollectPayment = (props) => {
             },
             error: t("PAYMENT_INVALID_MOBILE"),
             className: "payment-form-text-input-correction",
+            defaultValue: bill?.mobileNumber || formState?.payerMobile || "",
           },
         },
       ],
@@ -296,6 +299,7 @@ export const CollectPayment = (props) => {
 
   const getDefaultValues = () => ({
     payerName: bill?.payerName || formState?.payerName || "",
+    payerMobile: bill?.mobileNumber || formState?.payerMobile || "",
   });
 
   const getFormConfig = () => {
