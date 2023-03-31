@@ -11,6 +11,7 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import SelectChannel from "./pageComponents/SelectChannel";
 import Inbox from "./pages/employee/Inbox";
 import SelectTankSize from "./pageComponents/SelectTankSize";
+import NewApplicationCitizen from "./pages/citizen/NewApplication/index";
 
 export const fsmComponents = {
   FSMResponse: Response,
@@ -26,4 +27,5 @@ export const fsmComponents = {
   FSMFstpOperatorDetails: FstpOperatorDetails,
   SelectChannel: SelectChannel,
   SelectTankSize,
+  FSMNewApplicationCitizen: NewApplicationCitizen,
 };
